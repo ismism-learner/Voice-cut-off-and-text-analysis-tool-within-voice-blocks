@@ -5,17 +5,20 @@
 
 import os
 import uuid
-from typing import List, Tuple
+from typing import List, Tuple, TYPE_CHECKING
 from pathlib import Path
 import subprocess
 
-try:
-    import torch
+if TYPE_CHECKING:
     from pydub import AudioSegment as PyAudioSegment
-    from pydub.silence import detect_nonsilent
-except ImportError:
-    # 在实际运行时需要安装这些依赖
-    pass
+else:
+    try:
+        import torch
+        from pydub import AudioSegment as PyAudioSegment
+        from pydub.silence import detect_nonsilent
+    except ImportError:
+        # 在实际运行时需要安装这些依赖
+        PyAudioSegment = None
 
 from ..models.document import Segment
 

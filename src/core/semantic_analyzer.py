@@ -130,13 +130,16 @@ class SemanticAnalyzer:
         # 添加最后一个子段落
         last_text = text[last_pos:].strip()
         if last_text:
+            # 收集在最后段落文本中出现的标记词
+            last_markers = [marker for pos, marker, _ in split_points if pos >= last_pos]
+
             sub_seg = Segment(
                 id=f"{segment.id}_sub{len(split_points)}",
                 start_time=segment.start_time + (last_pos / len(text)) * segment.duration,
                 end_time=segment.end_time,
                 audio_path=segment.audio_path,
                 text=last_text,
-                markers=[marker for _, marker, _ in split_points if _ >= last_pos],
+                markers=last_markers,
                 confidence=segment.confidence
             )
             sub_segments.append(sub_seg)
